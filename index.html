@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rekap Absensi SMAN 1 Bendungan</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+header {
+    background: #14532d;
+    color: white;
+    padding: 25px 15px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 23px;
+    margin-bottom: 7px;
+}
+
+header p {
+    font-size: 14px;
+}
+
+.container {
+    width: 95%;
+    max-width: 1150px;
+    margin: 25px auto;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+}
+
+h2 {
+    font-size: 19px;
+    margin-bottom: 15px;
+    color: #14532d;
+}
+
+.pilihan {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 7px;
+    font-size: 14px;
+}
+
+select, input {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    font-size: 14px;
+    background: white;
+}
+
+button {
+    border: none;
+    padding: 11px 16px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 5px 3px 0 0;
+}
+
+.btn-green {
+    background: #15803d;
+    color: white;
+}
+
+.btn-blue {
+    background: #2563eb;
+    color: white;
+}
+
+.btn-red {
+    background: #dc2626;
+    color: white;
+}
+
+.btn-gray {
+    background: #64748b;
+    color: white;
+}
+
+button:hover {
+    opacity: 0.88;
+}
+
+.info {
+    background: #ecfdf5;
+    border-left: 4px solid #16a34a;
+    padding: 12px;
+    border-radius: 5px;
+    margin-top: 15px;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.tabel-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 650px;
+}
+
+th, td {
+    border: 1px solid #e2e8f0;
+    padding: 11px;
+    text-align: center;
+    font-size: 13px;
+}
+
+th {
+    background: #14532d;
+    color: white;
+}
+
+td.nama {
+    text-align: left;
+    font-weight: bold;
+}
+
+.status-select {
+    min-width: 115px;
+    padding: 8px;
+}
+
+.kartu-rekap {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.stat {
+    padding: 16px;
+    border-radius: 9px;
+    color: white;
+    text-align: center;
+}
+
+.stat h3 {
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.stat p {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.hadir { background: #16a34a; }
+.izin { background: #2563eb; }
+.sakit { background: #d97706; }
+.alfa { background: #dc2626; }
+.belum { background: #64748b; }
+
+.keterangan {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 10px;
+    line-height: 1.6;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #64748b;
+    font-size: 12px;
+}
+
+@media(max-width:600px) {
+    header h1 {
+        font-size: 19px;
+    }
+
+    .card {
+        padding: 15px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>SMAN 1 BENDUNGAN</h1>
+    <p>Sistem Rekap Absensi Siswa Bulanan</p>
+</header>
+
+<div class="container">
+
+    <!-- PILIHAN KELAS DAN BULAN -->
+    <div class="card">
+        <h2>Pengaturan Absensi</h2>
+
+        <div class="pilihan">
+            <div>
+                <label for="kelas">Pilih Kelas</label>
+                <select id="kelas" onchange="tampilkanSemua()">
+                    <option value="XI-A">XI-A</option>
+                    <option value="XI-B">XI-B</option>
+                    <option value="XI-C">XI-C</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="bulan">Pilih Bulan</label>
+                <select id="bulan" onchange="tampilkanSemua()">
+                    <option value="0">Januari</option>
+                    <option value="1">Februari</option>
+                    <option value="2">Maret</option>
+                    <option value="3">April</option>
+                    <option value="4">Mei</option>
+                    <option value="5">Juni</option>
+                    <option value="6">Juli</option>
+                    <option value="7">Agustus</option>
+                    <option value="8">September</option>
+                    <option value="9">Oktober</option>
+                    <option value="10">November</option>
+                    <option value="11">Desember</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="tahun">Pilih Tahun</label>
+                <input type="number" id="tahun" min="2020" max="2100"
+                       onchange="tampilkanSemua()">
+            </div>
+
+            <div>
+                <label for="tanggal">Tanggal Absensi</label>
+                <input type="date" id="tanggal" onchange="muatAbsensiHarian()">
+            </div>
+        </div>
+
+        <div class="info">
+            <b>Petunjuk:</b><br>
+            Pilih kelas, bulan, tahun, dan tanggal terlebih dahulu.
+            Setelah itu, isi status kehadiran setiap siswa dan tekan tombol Simpan Absensi.
+        </div>
+    </div>
+
+    <!-- PENGISIAN ABSENSI -->
+    <div class="card">
+        <h2>Pengisian Absensi Harian</h2>
+
+        <p id="judulHarian" style="margin-bottom:15px;font-size:14px;"></p>
+
+        <div class="tabel-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Nama Siswa</th>
+                        <th>NIS</th>
+                        <th>Status Kehadiran</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelHarian"></tbody>
+            </table>
+        </div>
+
+        <br>
+
+        <button class="btn-green" onclick="simpanAbsensi()">
+            Simpan Absensi
+        </button>
+
+        <button class="btn-gray" onclick="kosongkanForm()">
+            Kosongkan Pilihan
+        </button>
+    </div>
+
+    <!-- REKAP BULANAN -->
+    <div class="card">
+        <h2>Rekap Absensi Bulanan</h2>
+
+        <div class="kartu-rekap">
+            <div class="stat hadir">
+                <h3>Total Hadir</h3>
+                <p id="totalHadir">0</p>
+            </div>
+
+            <div class="stat izin">
+                <h3>Total Izin</h3>
+                <p id="totalIzin">0</p>
+            </div>
+
+            <div class="stat sakit">
+                <h3>Total Sakit</h3>
+                <p id="totalSakit">0</p>
+            </div>
+
+            <div class="stat alfa">
+                <h3>Total Alfa</h3>
+                <p id="totalAlfa">0</p>
+            </div>
+
+            <div class="stat belum">
+                <h3>Belum Diisi</h3>
+                <p id="totalBelum">0</p>
+            </div>
+        </div>
+
+        <div class="tabel-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Nama Siswa</th>
+                        <th>Hadir</th>
+                        <th>Izin</th>
+                        <th>Sakit</th>
+                        <th>Alfa</th>
+                        <th>Total Terisi</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelRekap"></tbody>
+            </table>
+        </div>
+
+        <p class="keterangan">
+            Keterangan: Belum diisi berarti status siswa belum dicatat.
+            Data tersebut tidak otomatis dihitung sebagai Alfa.
+        </p>
+
+        <br>
+
+        <button class="btn-blue" onclick="exportRekap()">
+            Download Rekap Bulanan CSV
+        </button>
+
+        <button class="btn-blue" onclick="exportDetail()">
+            Download Detail Harian CSV
+        </button>
+
+        <button class="btn-red" onclick="hapusBulan()">
+            Hapus Data Bulan Ini
+        </button>
+    </div>
+
+</div>
+
+<footer>
+    Sistem Rekap Absensi Siswa | SMAN 1 Bendungan
+</footer>
+
+<script>
+
+// =====================================
+// 1. DATA SISWA
+// =====================================
+
+// Pembagian kelas di bawah ini masih contoh.
+// Silakan sesuaikan nama dan kelas siswa pada bagian ini.
+
+const siswa = {
+    "XI-A": [
+        { nama: "Alfandi", nis: "001" },
+        { nama: "Putri", nis: "002" },
+        { nama: "Kholis", nis: "003" },
+        { nama: "Parno", nis: "004" }
+    ],
+
+    "XI-B": [
+        { nama: "Siti", nis: "005" },
+        { nama: "Akmal", nis: "006" },
+        { nama: "Diki", nis: "007" }
+    ],
+
+    "XI-C": [
+        { nama: "Ardi", nis: "008" },
+        { nama: "Alip", nis: "009" },
+        { nama: "Setu", nis: "010" }
+    ]
+};
+
+// =====================================
+// 2. PENGATURAN AWAL
+// =====================================
+
+const KEY = "rekapAbsensiSMAN1Bendungan";
+
+let dataAbsensi = {};
+
+try {
+    dataAbsensi = JSON.parse(localStorage.getItem(KEY)) || {};
+} catch (error) {
+    dataAbsensi = {};
+}
+
+const namaBulan = [
+    "Januari", "Februari", "Maret", "April",
+    "Mei", "Juni", "Juli", "Agustus",
+    "September", "Oktober", "November", "Desember"
+];
+
+const sekarang = new Date();
+
+document.getElementById("bulan").value = sekarang.getMonth();
+document.getElementById("tahun").value = sekarang.getFullYear();
+
+function tanggalLokal(date) {
+    const tahun = date.getFullYear();
+    const bulan = String(date.getMonth() + 1).padStart(2, "0");
+    const hari = String(date.getDate()).padStart(2, "0");
+
+    return ${tahun}-${bulan}-${hari};
+}
+
+document.getElementById("tanggal").value = tanggalLokal(sekarang);
+
+// =====================================
+// 3. FUNGSI MENGAMBIL PENGATURAN
+// =====================================
+
+function ambilKelas() {
+    return document.getElementById("kelas").value;
+}
+
+function ambilBulan() {
+    return Number(document.getElementById("bulan").value);
+}
+
+function ambilTahun() {
+    return Number(document.getElementById("tahun").value);
+}
+
+function ambilTanggal() {
+    return document.getElementById("tanggal").value;
+}
+
+function kunciData(kelas, tanggal, nis) {
+    return ${kelas}_${tanggal}_${nis};
+}
+
+function simpanKeBrowser() {
+    localStorage.setItem(KEY, JSON.stringify(dataAbsensi));
+}
+
+// =====================================
+// 4. MENAMPILKAN ABSENSI HARIAN
+// =====================================
+
+function muatAbsensiHarian() {
+    const kelas = ambilKelas();
+    const tanggal = ambilTanggal();
+    const daftarSiswa = siswa[kelas];
+
+    const bulanDipilih = ambilBulan();
+    const tahunDipilih = ambilTahun();
+
+    const tanggalDipilih = new Date(tanggal + "T00:00:00");
+
+    if (
+        !tanggal ||
+        tanggalDipilih.getMonth() !== bulanDipilih ||
+        tanggalDipilih.getFullYear() !== tahunDipilih
+    ) {
+        document.getElementById("tabelHarian").innerHTML =
+            <tr><td colspan="4">Tanggal harus sesuai dengan bulan dan tahun yang dipilih.</td></tr>;
+        document.getElementById("judulHarian").textContent =
+            "Silakan pilih tanggal yang sesuai.";
+        return;
+    }
+
+    document.getElementById("judulHarian").textContent =
+        Kelas ${kelas} | ${tanggalDipilih.getDate()} ${namaBulan[bulanDipilih]} ${tahunDipilih};
+
+    let html = "";
+
+    daftarSiswa.forEach((anak, index) => {
+        const key = kunciData(kelas, tanggal, anak.nis);
+        const status = dataAbsensi[key] || "";
+
+        html += `
+        <tr>
+            <td>${index + 1}</td>
+            <td class="nama">${anak.nama}</td>
+            <td>${anak.nis}</td>
+            <td>
+                <select class="status-select"
+                    id="status_${anak.nis}">
+                    <option value="" ${status === "" ? "selected" : ""}>
+                        Belum diisi
+                    </option>
+                    <option value="H" ${status === "H" ? "selected" : ""}>
+                        Hadir
+                    </option>
+                    <option value="I" ${status === "I" ? "selected" : ""}>
+                        Izin
+                    </option>
+                    <option value="S" ${status === "S" ? "selected" : ""}>
+                        Sakit
+                    </option>
+                    <option value="A" ${status === "A" ? "selected" : ""}>
+                        Alfa
+                    </option>
+                </select>
+            </td>
+        </tr>`;
+    });
+
+    document.getElementById("tabelHarian").innerHTML = html;
+}
+
+// =====================================
+// 5. MENYIMPAN ABSENSI
+// =====================================
+
+function simpanAbsensi() {
+    const kelas = ambilKelas();
+    const tanggal = ambilTanggal();
+    const bulan = ambilBulan();
+    const tahun = ambilTahun();
+
+    const tanggalDipilih = new Date(tanggal + "T00:00:00");
+
+    if (
+        !tanggal ||
+        tanggalDipilih.getMonth() !== bulan ||
+        tanggalDipilih.getFullYear() !== tahun
+    ) {
+        alert("Pilih tanggal yang sesuai dengan bulan dan tahun.");
+        return;
+    }
+
+    const daftarSiswa = siswa[kelas];
+
+    daftarSiswa.forEach(anak => {
+        const pilihan = document.getElementById("status_" + anak.nis);
+        const key = kunciData(kelas, tanggal, anak.nis);
+
+        if (pilihan.value === "") {
+            delete dataAbsensi[key];
+        } else {
+            dataAbsensi[key] = pilihan.value;
+        }
+    });
+
+    simpanKeBrowser();
+    tampilkanSemua();
+
+    alert("Absensi berhasil disimpan!");
+}
+
+// =====================================
+// 6. KOSONGKAN PILIHAN DI FORM
+// =====================================
+
+function kosongkanForm() {
+    if (!confirm("Kosongkan semua pilihan pada form tanggal ini?")) {
+        return;
+    }
+
+    const kelas = ambilKelas();
+    const tanggal = ambilTanggal();
+
+    siswa[kelas].forEach(anak => {
+        const pilihan = document.getElementById("status_" + anak.nis);
+
+        if (pilihan) {
+            pilihan.value = "";
+        }
+    });
+
+    // Tidak menghapus data yang sudah tersimpan.
+    alert("Pilihan pada form dikosongkan. Tekan Simpan Absensi jika ingin menghapus status tersimpan.");
+}
+
+// =====================================
+// 7. MENGHITUNG REKAP BULANAN
+// =====================================
+
+function hitungRekap() {
+    const kelas = ambilKelas();
+    const bulan = ambilBulan();
+    const tahun = ambilTahun();
+
+    const jumlahHari = new Date(tahun, bulan + 1, 0).getDate();
+
+    let total = {
+        H: 0,
+        I: 0,
+        S: 0,
+        A: 0,
+        belum: 0
+    };
+
+    let html = "";
+
+    siswa[kelas].forEach((anak, index) => {
+        let hitung = {
+            H: 0,
+            I: 0,
+            S: 0,
+            A: 0
+        };
+
+        for (let hari = 1; hari <= jumlahHari; hari++) {
+            const tanggal =
+                ${tahun}-${String(bulan + 1).padStart(2, "0")}-${String(hari).padStart(2, "0")};
+
+            const key = kunciData(kelas, tanggal, anak.nis);
+            const status = dataAbsensi[key];
+
+            if (status && hitung[status] !== undefined) {
+                hitung[status]++;
+            }
+        }
+
+        const terisi =
+            hitung.H + hitung.I + hitung.S + hitung.A;
+
+        const belum = jumlahHari - terisi;
+
+        total.H += hitung.H;
+        total.I += hitung.I;
+        total.S += hitung.S;
+        total.A += hitung.A;
+        total.belum += belum;
+
+        html += `
+        <tr>
+            <td>${index + 1}</td>
+            <td class="nama">${anak.nama}</td>
+            <td>${hitung.H}</td>
+            <td>${hitung.I}</td>
+            <td>${hitung.S}</td>
+            <td>${hitung.A}</td>
+            <td>${terisi}</td>
+        </tr>`;
+    });
+
+    document.getElementById("tabelRekap").innerHTML = html;
+
+    document.getElementById("totalHadir").textContent = total.H;
+    document.getElementById("totalIzin").textContent = total.I;
+    document.getElementById("totalSakit").textContent = total.S;
+    document.getElementById("totalAlfa").textContent = total.A;
+    document.getElementById("totalBelum").textContent = total.belum;
+}
+
+// =====================================
+// 8. MENAMPILKAN SEMUA DATA
+// =====================================
+
+function tampilkanSemua() {
+    const bulan = ambilBulan();
+    const tahun = ambilTahun();
+
+    const tanggalInput = document.getElementById("tanggal");
+    const tanggalSaatIni = tanggalInput.value;
+
+    if (tanggalSaatIni) {
+        const tanggalLama = new Date(tanggalSaatIni + "T00:00:00");
+
+        if (
+            tanggalLama.getMonth() !== bulan ||
+            tanggalLama.getFullYear() !== tahun
+        ) {
+            const tanggalBaru = Math.min(
+                tanggalLama.getDate(),
+                new Date(tahun, bulan + 1, 0).getDate()
+            );
+
+            tanggalInput.value =
+                ${tahun}-${String(bulan + 1).padStart(2, "0")}-${String(tanggalBaru).padStart(2, "0")};
+        }
+    }
+
+    muatAbsensiHarian();
+    hitungRekap();
+}
+
+// =====================================
+// 9. DOWNLOAD REKAP BULANAN CSV
+// =====================================
+
+function unduhCSV(namaFile, isi) {
+    const blob = new Blob(["\uFEFF" + isi], {
+        type: "text/csv;charset=utf-8;"
+    });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = namaFile;
+    link.click();
+
+    URL.revokeObjectURL(url);
+}
+
+function exportRekap() {
+    const kelas = ambilKelas();
+    const bulan = ambilBulan();
+    const tahun = ambilTahun();
+
+    const jumlahHari = new Date(tahun, bulan + 1, 0).getDate();
+
+    let csv = "No,Nama Siswa,NIS,Hadir,Izin,Sakit,Alfa,Total Terisi\n";
+
+    siswa[kelas].forEach((anak, index) => {
+        let h = 0, i = 0, s = 0, a = 0;
+
+        for (let hari = 1; hari <= jumlahHari; hari++) {
+            const tanggal =
+                ${tahun}-${String(bulan + 1).padStart(2, "0")}-${String(hari).padStart(2, "0")};
+
+            const status =
+                dataAbsensi[kunciData(kelas, tanggal, anak.nis)];
+
+            if (status === "H") h++;
+            if (status === "I") i++;
+            if (status === "S") s++;
+            if (status === "A") a++;
+        }
+
+        csv += ${index + 1},"${anak.nama}",${anak.nis},${h},${i},${s},${a},${h + i + s + a}\n;
+    });
+
+    unduhCSV(
+        Rekap_${kelas}_${namaBulan[bulan]}_${tahun}.csv,
+        csv
+    );
+}
+
+// =====================================
+// 10. DOWNLOAD DETAIL HARIAN CSV
+// =====================================
+
+function exportDetail() {
+    const kelas = ambilKelas();
+    const bulan = ambilBulan();
+    const tahun = ambilTahun();
+
+    const jumlahHari = new Date(tahun, bulan + 1, 0).getDate();
+
+    let csv = "Tanggal,Kelas,Nama Siswa,NIS,Status\n";
+
+    for (let hari = 1; hari <= jumlahHari; hari++) {
+        const tanggal =
+            ${tahun}-${String(bulan + 1).padStart(2, "0")}-${String(hari).padStart(2, "0")};
+
+        siswa[kelas].forEach(anak => {
+            const status =
+                dataAbsensi[kunciData(kelas, tanggal, anak.nis)];
+
+            if (status) {
+                const keterangan = {
+                    H: "Hadir",
+                    I: "Izin",
+                    S: "Sakit",
+                    A: "Alfa"
+                }[status];
+
+                csv += ${tanggal},${kelas},"${anak.nama}",${anak.nis},${keterangan}\n;
+            }
+        });
+    }
+
+    unduhCSV(
+        Detail_${kelas}_${namaBulan[bulan]}_${tahun}.csv,
+        csv
+    );
+}
+
+// =====================================
+// 11. HAPUS DATA SATU BULAN
+// =====================================
+
+function hapusBulan() {
+    const kelas = ambilKelas();
+    const bulan = ambilBulan();
+    const tahun = ambilTahun();
+
+    const yakin = confirm(
+        Apakah Anda yakin ingin menghapus seluruh data absensi kelas ${kelas} bulan ${namaBulan[bulan]} ${tahun}?
+    );
+
+    if (!yakin) return;
+
+    const jumlahHari = new Date(tahun, bulan + 1, 0).getDate();
+
+    siswa[kelas].forEach(anak => {
+        for (let hari = 1; hari <= jumlahHari; hari++) {
+            const tanggal =
+                ${tahun}-${String(bulan + 1).padStart(2, "0")}-${String(hari).padStart(2, "0")};
+
+            const key = kunciData(kelas, tanggal, anak.nis);
+            delete dataAbsensi[key];
+        }
+    });
+
+    simpanKeBrowser();
+    tampilkanSemua();
+
+    alert("Data absensi bulan tersebut berhasil dihapus.");
+}
+
+// =====================================
+// 12. JALANKAN APLIKASI
+// =====================================
+
+tampilkanSemua();
+
+</script>
+
+</body>
+</html>
